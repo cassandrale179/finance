@@ -1,21 +1,30 @@
 import re
-acc= "spending/2018may.csv"
+import sys
+if (len(sys.argv)) > 1:
+    acc = "spending/" + sys.argv[1]
+else:
+    acc = "spending/2018may.csv"
 f  = open(acc, "r")
 
 #------- GLOBAL ARRAY -------
-food = ["NASSAU", "STARBUCKS", "KIWI", "SBUCKS", "GRUBHUB", "GYRO", "COFFEE", "PENANG", "HALAL", "TEA", "SHAKE SHACK", "TRYCAVIARCOM"]
+food = ["NASSAU", "STARBUCKS", "KIWI", "SBUCKS", "GRUBHUB", "GYRO", "COFFEE", "PENANG", "HALAL", "TEA", "SHAKE SHACK", "TRYCAVIARCOM", "CAFE"]
 transportation = ["UBER", "LYFT", "SEPTA", "NJT"]
 grocery = ["INSTACART", "WALMART", "TARGET", "WEGMANS", "MARKETPLACE"]
 amazon = ["AMAZON"]
 housing = ["AIRBNB"]
-utilites = ["PECO", "VERIZON", "GAS", "US MOBILE", "ATT"]
+utilites = ["PECO", "VERIZON", "GAS", "US MOBILE", "ATT", "NOTARIZE"]
 entertainment = ["Spotify", "MintSIM", "HBO", "AMC", "US MOBILE"]
 healthcare = ["HEALTHCARE"]
+transfer = ["TRANSFER"]
+deposit = ["HIREGENICS", "PLUS RELOCATION", "PAYPAL"]
 
-name = ["food", "transportation", "grocery", "amazon", "housing", "utilites", "entertainment", "healthcare"]
-category = [food, transportation, grocery, amazon, housing, utilites, entertainment, healthcare]
+name = ["food", "transportation", "grocery", "amazon", "housing", "utilites", "entertainment", "healthcare",  "transfer", "deposit"]
+category = [food, transportation, grocery, amazon, housing, utilites, entertainment, healthcare, transfer, deposit]
 values = [0]*len(category)
 statement = []
+
+known = []
+unknown = []
 
 
 for line in f:
@@ -42,7 +51,13 @@ for item in category:
 
         if any(s in title for s in item):
             values[ind] += value
+            known.append(line)
     ind += 1
 
-for n, v in zip(name, values ):
-    print (n, ":", v)
+for i in range(0,7):
+    print(name[i], values[i])
+
+print("Total spending", sum(values))
+
+
+unknown = list(set(statement) - set(known))
